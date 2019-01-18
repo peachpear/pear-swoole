@@ -3,7 +3,7 @@ pear让你更畅快地编程。pear-swoole是以pear-api为基础，增加聊天
 
 ### 前提准备
 
-必要服务支持：Mysql、php-cli、Swoole、Redis、Kafka、RabbitMQ
+必要服务支持：php-cli、Swoole、Mysql、Kafka、RabbitMQ、Redis
 
 可选服务支持：Elasticsearch、Kibana、Jenkins
 
