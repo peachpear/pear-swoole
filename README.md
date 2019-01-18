@@ -23,31 +23,16 @@ ln -sf dev.php main.php
 ```
 cd /path/yourProjectName/public
 
-// log队列消费者开始运行
-php yii consumer/start log
+// swoole服务端开始运行
+php yii swoole/start
 
-// mail队列消费者开始运行
-php yii consumer/start mail
-
-// ticket队列消费者开始运行
-php yii consumer/start ticket
-
-// ticket队列消费者停止运行
-php yii consumer/stop ticket
-
-// ticket队列消费者重启运行
-php yii consumer/restart ticket
-
-// ticket延迟队列消费者开始运行
-php yii delay/start ticket
-
-// push_socket队列消费者开始运行
-php yii consumer/start pushSocket
+// proxy服务端开始运行
+php yii proxy/start
 ```
 
 #### 特别说明
-其实，这个项目中最核心的就是AMQP连接RabbitMQ那一段代码，完全可以不使用框架。
-之所以借用Yii2框架，就是为了方便使用日志功能，日志这一块可以注意下。
+proxy服务端的作用是代理服务，作为其中一个swoole服务端与其他swoole服务端信息交互的中间服务而存在。
+这样设计的目的是本着一个进程一个服务做一件事，尽量为各独立服务解耦，使服务逻辑更清晰。
 
 #### 目录结构
 ```
@@ -60,10 +45,12 @@ php yii consumer/start pushSocket
 │   ├── misc
 │   ├── models
 │   └── service
-└── console
-    ├── components
-    ├── config
-    └── controllers    
+├── console
+│   ├── components
+│   ├── config
+│   └── controllers    
+└── public
+    └── yii   
 ```
 
 #### 编码规范
