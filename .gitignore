@@ -1,52 +1,44 @@
-# Prerequisites
-*.d
+# phpstorm project files
+.idea
 
-# Object files
-*.o
-*.ko
-*.obj
-*.elf
+# netbeans project files
+nbproject
 
-# Linker output
-*.ilk
-*.map
-*.exp
+# zend studio for eclipse project files
+.buildpath
+.project
+.settings
 
-# Precompiled Headers
-*.gch
-*.pch
+# windows thumbnail cache
+Thumbs.db
 
-# Libraries
-*.lib
-*.a
-*.la
-*.lo
+# composer itself is not needed
+composer.phar
 
-# Shared objects (inc. Windows DLLs)
-*.dll
-*.so
-*.so.*
-*.dylib
+# Mac DS_Store Files
+.DS_Store
 
-# Executables
-*.exe
-*.out
-*.app
-*.i*86
-*.x86_64
-*.hex
+# phpunit itself is not needed
+phpunit.phar
+# local phpunit config
+/phpunit.xml
 
-# Debug files
-*.dSYM/
-*.su
-*.idb
-*.pdb
+# vagrant runtime
+/.vagrant
 
-# Kernel Module Compile Results
-*.mod*
-*.cmd
-.tmp_versions/
-modules.order
-Module.symvers
-Mkfile.old
-dkms.conf
+# composer vendor dir
+/vendor
+
+# composer.lock
+composer.lock
+
+# config
+backend/config/main.php
+console/config/main.php
+
+# runtime
+backend/runtime/*
+console/runtime/*
+
+# .htaccess
+public/.htaccess
