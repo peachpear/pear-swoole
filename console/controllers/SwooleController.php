@@ -41,7 +41,7 @@ class SwooleController extends BaseController
     public function actionStart()
     {
         if ($this->masterPid > 0) {
-            print_r('Server is already running. Please stop it first.' ."\n");
+            print_r('Server is already running. Please stop it first.' ."\r\n");
             return;
         }
 
@@ -70,7 +70,7 @@ class SwooleController extends BaseController
             \posix_kill($this->masterPid, SIGUSR1); // reload all worker
 //            \posix_kill($this->masterPid, SIGUSR2); // reload all task
         } else {
-            print_r('master pid is null, maybe you delete the pid file we created. you can manually kill the master process with signal SIGUSR1.' . "\n");
+            print_r('master pid is null, maybe you delete the pid file we created. you can manually kill the master process with signal SIGUSR1.' . "\r\n");
         }
     }
 
@@ -82,7 +82,7 @@ class SwooleController extends BaseController
         if (!empty($this->masterPid)) {
             posix_kill($this->masterPid, SIGTERM);
         } else {
-            print_r('master pid is null, maybe you delete the pid file we created. you can manually kill the master process with signal SIGTERM.' . "\n");
+            print_r('master pid is null, maybe you delete the pid file we created. you can manually kill the master process with signal SIGTERM.' . "\r\n");
         }
     }
 
@@ -121,7 +121,7 @@ class SwooleController extends BaseController
 
         $this->worker = new StaskController();
 
-        echo 'worker_id:' .$workerId ."\n";
+        echo 'worker_id:' .$workerId ."\r\n";
     }
 
     /**
