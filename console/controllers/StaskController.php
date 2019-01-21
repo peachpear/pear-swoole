@@ -20,6 +20,7 @@ class StaskController
         switch($data['event'])
         {
             case 'CONNECT' :
+                $server->push($fd, json_encode($data, JSON_UNESCAPED_SLASHES));
                 Yii::$app->demoDB->close();
                 break;
             case 'HEART_BEAT' :
