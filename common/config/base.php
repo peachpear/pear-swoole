@@ -27,9 +27,11 @@ return array(
             "class" =>  'common\components\LRabbitQueue'
         ],
         'log' => [
+            'flushInterval' => 1,
             'targets' => [
                 'kafka' => [
                     'class' => 'common\lib\LKafkaTarget',
+                    'exportInterval' => 1,
                 ],
             ],
         ]
