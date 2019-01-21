@@ -31,6 +31,8 @@ php yii swoole/stop
 
 // proxy服务端开始运行
 php yii proxy/start
+
+
 ```
 
 #### 特别说明
