@@ -16,7 +16,7 @@ $commonConfig = array(
         ],
         'kafkaProducer' => [
             "metadata"  => [
-                "brokerList"    => "192.168.40.122:9092",
+                "brokerList"    => "192.168.4.112:9092",
             ],
             "requireAck"    =>  0,
         ],

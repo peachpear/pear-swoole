@@ -30,8 +30,8 @@ class SwooleController extends BaseController
             'config' => Yii::$app->params['socket_config'],
         ];
 
-        $this->masterPid = file_exists($this->setting['config']['pidfile'])
-            ? file_get_contents($this->setting['config']['pidfile'])
+        $this->masterPid = file_exists($this->setting['config']['pid_file'])
+            ? file_get_contents($this->setting['config']['pid_file'])
             : null;
     }
 
@@ -94,7 +94,7 @@ class SwooleController extends BaseController
     {
         swoole_set_process_name("swoole_socket_master_process");
 
-        file_put_contents($this->setting['config']['pidfile'], $server->master_pid);
+        file_put_contents($this->setting['config']['pid_file'], $server->master_pid);
     }
 
     /**
@@ -130,7 +130,7 @@ class SwooleController extends BaseController
      */
     public function onShutdown(\swoole_websocket_server $server)
     {
-        unlink($this->setting['config']['pidfile']);
+        unlink($this->setting['config']['pid_file']);
     }
 
     /**
