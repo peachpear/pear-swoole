@@ -156,6 +156,11 @@ class SwooleController extends BaseController
         Yii::trace($data);
     }
 
+    /**
+     *
+     * @param \swoole_websocket_server $server
+     * @param $request
+     */
     public function onOpen(\swoole_websocket_server $server, $request)
     {
         $data = [
@@ -163,9 +168,13 @@ class SwooleController extends BaseController
             'page_id' => $request->fd,
         ];
 
-        $server->push($request->fd, json_encode($data,JSON_UNESCAPED_SLASHES));
+        $server->push($request->fd, json_encode($data, JSON_UNESCAPED_SLASHES));
     }
 
+    /**
+     * @param \swoole_websocket_server $server
+     * @param $frame
+     */
     public function onMessage(\swoole_websocket_server $server, $frame)
     {
         Yii::trace($frame->data);
@@ -175,6 +184,10 @@ class SwooleController extends BaseController
         $server->task($data);
     }
 
+    /**
+     * @param \swoole_websocket_server $server
+     * @param $fd
+     */
     public function OnClose(\swoole_websocket_server $server, $fd)
     {
         $this->worker->close($fd);
