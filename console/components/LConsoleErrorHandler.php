@@ -17,37 +17,14 @@ class LConsoleErrorHandler extends ErrorHandler
 
     public function handleException( $exception )
     {
-        $data = $this->formatException( $exception );
         $this->logException( $exception );
         // 发邮件
         if ( YII_DEBUG ) {
             throw $exception;
         } else {
+            $data = $this->formatException( $exception );
             $this->sendErrorMsg( $data );
         }
-    }
-
-    /**
-     * 发邮件
-     * @param $data
-     * @internal param $exception
-     */
-    public function sendErrorMsg( $data )
-    {
-        /** @var LRabbitQueue $queue */
-        $queue = Yii::$app->get("queue");
-        $params = [
-            'send_to' => $this->sendTo,
-            'cc_to' => $this->sendCC,
-            'text' => json_encode( $data ),
-            'title' => "[".ENV.']cli-exception-error',
-            'file' => []
-        ];
-        $queue->produce(
-            $params,
-            'async',
-            'mail'
-        );
     }
 
     public function handleError($code, $message, $file, $line)
@@ -57,6 +34,29 @@ class LConsoleErrorHandler extends ErrorHandler
         $this->sendErrorMsg($this->formatException($exception));
     }
 
+    public function handleFatalError()
+    {
+        $error = error_get_last();
+        if (LException::isFatalError($error)) {
+            $exception = new \ErrorException($error['message'], 500, $error['type'], $error['file'], $error['line']);
+            $this->exception = $exception;
+
+//            $this->logException($exception);
+
+            if ($this->discardExistingOutput) {
+                $this->clearOutput();
+            }
+            // need to explicitly flush logs because exit() next will terminate the app immediately
+            Yii::getLogger()->flush(true);
+            $this->handleException($exception);
+        }
+    }
+
+    /**
+     * 准备邮件中异常/错误的格式
+     * @param $exception
+     * @return array
+     */
     protected function formatException($exception)
     {
         $fileName = $exception->getFile();
@@ -92,25 +92,32 @@ class LConsoleErrorHandler extends ErrorHandler
         );
     }
 
-    public function renderException($exception)
+    /**
+     * 发邮件
+     * @param $data
+     * @internal param $exception
+     */
+    public function sendErrorMsg( $data )
     {
-        $this->handleException($exception);
+        /** @var LRabbitQueue $queue */
+        $queue = Yii::$app->get("queue");
+        $params = [
+            'send_to' => $this->sendTo,
+            'cc_to' => $this->sendCC,
+            'text' => json_encode( $data ),
+            'title' => "[".ENV.']cli-exception-error',
+            'file' => []
+        ];
+        $queue->produce($params, 'async', 'mail');
     }
 
-    public function handleFatalError()
+    /**
+     * 渲染异常输出
+     * 不会用到，只是实现父类抽象方法
+     * @param \Exception $exception
+     */
+    public function renderException($exception)
     {
-        $error = error_get_last();
-        if (LException::isFatalError($error)) {
-            $exception = new \ErrorException($error['message'], 500, $error['type'], $error['file'], $error['line']);
-            $this->exception = $exception;
-//            $this->logException($exception);
-
-            if ($this->discardExistingOutput) {
-                $this->clearOutput();
-            }
-            // need to explicitly flush logs because exit() next will terminate the app immediately
-            Yii::getLogger()->flush(true);
-            $this->handleException($exception);
-        }
+//        $this->handleException($exception);  // 不能这么写
     }
 }
