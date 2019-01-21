@@ -26,6 +26,9 @@ cd /path/yourProjectName/public
 // swoole服务端开始运行
 php yii swoole/start
 
+// swoole服务端停止运行
+php yii swoole/stop
+
 // proxy服务端开始运行
 php yii proxy/start
 ```
