@@ -16,15 +16,16 @@ class StaskController
      */
     public function run($data, $server, $fd)
     {
-        Yii::trace($data);
-        switch($data['event'])
-        {
-            case 'CONNECT' :
-                $server->push($fd, json_encode($data, JSON_UNESCAPED_SLASHES));
-                Yii::$app->demoDB->close();
-                break;
-            case 'HEART_BEAT' :
-                break;
+        if (isset($data['event'])) {
+            switch($data['event'])
+            {
+                case 'CONNECT' :
+                    $server->push($fd, json_encode($data, JSON_UNESCAPED_SLASHES));
+                    Yii::$app->demoDB->close();
+                    break;
+                case 'HEART_BEAT' :
+                    break;
+            }
         }
     }
 

@@ -108,12 +108,12 @@ class SwooleController extends BaseController
 
     /**
      * Worker|Task 进程启动时执行
-     * @param \swoole_websocket_server $serv
+     * @param \swoole_websocket_server $server
      * @param $workerId  进程id
      */
-    public function onWorkerStart(\swoole_websocket_server $serv, $workerId)
+    public function onWorkerStart(\swoole_websocket_server $server, $workerId)
     {
-        if ($workerId >= $serv->setting['worker_num']) {
+        if ($workerId >= $server->setting['worker_num']) {
             swoole_set_process_name("swoole_socket_task_process");
         } else {
             swoole_set_process_name("swoole_socket_work_process");
@@ -134,26 +134,26 @@ class SwooleController extends BaseController
     }
 
     /**
-     * @param $serv
+     * @param \swoole_websocket_server $server
      * @param $task_id
      * @param $from_id
      * @param $data
      */
-    public function onTask(\swoole_websocket_server $serv, $task_id, $from_id, $data)
+    public function onTask(\swoole_websocket_server $server, $task_id, $from_id, $data)
     {
-        $this->worker->run($data, $serv, $data['fd']);
+        $this->worker->run($data, $server, $data['fd']);
 
-        $serv->finish("OK");
+        $server->finish("OK");
     }
 
     /**
-     * @param $serv
+     * @param $server
      * @param $task_id
      * @param $data
      */
-    public function onTaskFinish(\swoole_websocket_server $serv, $task_id, $data)
+    public function onTaskFinish(\swoole_websocket_server $server, $task_id, $data)
     {
-        Yii::trace($data);
+        Yii::trace($data, __METHOD__);
     }
 
     /**
@@ -177,8 +177,6 @@ class SwooleController extends BaseController
      */
     public function onMessage(\swoole_websocket_server $server, $frame)
     {
-        Yii::trace($frame->data);
-
         $data = json_decode($frame->data, true);
         $data['fd'] = $frame->fd;
         $server->task($data);
