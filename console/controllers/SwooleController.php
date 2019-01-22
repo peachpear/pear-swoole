@@ -45,6 +45,15 @@ class SwooleController extends BaseController
             return;
         }
 
+        // swoole_table
+        $table = new \swoole_table(8192);
+        $table->column('app_token', \swoole_table::TYPE_STRING, 32);
+        $table->column('role', \swoole_table::TYPE_STRING, 16);
+        $table->column('client_token', \swoole_table::TYPE_STRING, 64);
+        $table->column('appid', \swoole_table::TYPE_STRING, 64);
+        $table->column('secret', \swoole_table::TYPE_STRING, 64);
+        $table->create();
+
         // proxy_client
         $proxy = new \swoole_client(SWOOLE_TCP | SWOOLE_KEEP);
         $proxy->connect(
@@ -64,6 +73,8 @@ class SwooleController extends BaseController
         $server->on('open', [$this, 'onOpen']);
         $server->on('message', [$this, 'onMessage']);
         $server->on('close', [$this, 'onClose']);
+        $server->port = $this->setting['port'];
+        $server->table = $table;
         $server->proxy = $proxy;
 
         $server->start();
@@ -173,7 +184,7 @@ class SwooleController extends BaseController
     {
         $data = [
             'event' => 'CONNECT',
-            'page_id' => $request->fd,
+            'data' => []
         ];
 
         $server->push($request->fd, json_encode($data, JSON_UNESCAPED_SLASHES));
