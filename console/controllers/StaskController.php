@@ -30,9 +30,10 @@ class StaskController
     }
 
     /**
+     * @param $server
      * @param $fd
      */
-    public function close($fd)
+    public function close($server, $fd)
     {
         Yii::$app->demoDB->close();
     }

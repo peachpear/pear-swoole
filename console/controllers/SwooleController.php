@@ -45,8 +45,15 @@ class SwooleController extends BaseController
             return;
         }
 
-        $server = new \swoole_websocket_server($this->setting['ip'], $this->setting['port']);
+        // proxy_client
+        $proxy = new \swoole_client(SWOOLE_TCP | SWOOLE_KEEP);
+        $proxy->connect(
+            $this->setting['proxy']['ip'],
+            $this->setting['proxy']['port']
+        );
 
+        // websocket_server
+        $server = new \swoole_websocket_server($this->setting['ip'], $this->setting['port']);
         $server->set($this->setting['config']);
         $server->on('Start', [$this, 'onStart']);
         $server->on('ManagerStart', [$this, 'onManagerStart']);
@@ -57,6 +64,7 @@ class SwooleController extends BaseController
         $server->on('open', [$this, 'onOpen']);
         $server->on('message', [$this, 'onMessage']);
         $server->on('close', [$this, 'onClose']);
+        $server->proxy = $proxy;
 
         $server->start();
     }
@@ -188,6 +196,6 @@ class SwooleController extends BaseController
      */
     public function OnClose(\swoole_websocket_server $server, $fd)
     {
-        $this->worker->close($fd);
+        $this->worker->close($server, $fd);
     }
 }
