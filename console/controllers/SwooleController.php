@@ -166,7 +166,7 @@ class SwooleController extends BaseController
     }
 
     /**
-     * @param $server
+     * @param \swoole_websocket_server $server
      * @param $task_id
      * @param $data
      */

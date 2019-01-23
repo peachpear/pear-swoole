@@ -66,9 +66,37 @@ class StaskController
                     ];
                     $server->push($client_fd, json_encode($sendMsg, JSON_UNESCAPED_SLASHES));
 
-                    /* 如果客户端存在多个服务端连接，则要通过协程发送到多个服务端分别推送 */
+                    /* 如果客户端存在多个服务端连接，则要通过代理服务发送到多个服务端分别推送 */
+                    $proxyData = [
+                        'event' => 'TO_WEBSOCKET_SERVER',
+                        'data' => [
+                            'server_info' => [
+                                'ip' => $client_info[0],
+                                'port' => $client_info[1],
+                            ],
+                            'server_data' => [
+                                'event' => 'NEW_MSG_TO_FD',
+                                'data' => [
+                                    'client_id' => $mysqlData['client_id'],
+                                    'fd' => $client_info[2],
+                                    'msg' => $data['data']['msg'],
+                                ]
+                            ],
+                        ],
+                    ];
+                    $server->proxy->send(json_encode($proxyData) ."\r\n\r\n");
 
                     break;
+                case 'NEW_MSG_TO_FD' :
+                    // 收到代理服务器推送过来的数据，要求直接推送新信息给该服务端连接的fd
+                    $client_fd = $data['data']['fd'];
+                    $sendMsg = [
+                        'event' => 'NEW_MSG',
+                        'data' => [
+                            'msg' => $data['data']['msg'],
+                        ],
+                    ];
+                    $server->push($client_fd, json_encode($sendMsg, JSON_UNESCAPED_SLASHES));
                 case 'HEART_BEAT' :
                     break;
             }
@@ -97,7 +125,7 @@ class StaskController
         // 从mysql数据表client_online_list删除本条记录
         // ...
         // 关闭客户端连接
-        $server->close($fd);
+//        $server->close($fd);
         // 关闭这一进程的数据库连接
         Yii::$app->demoDB->close();
     }
