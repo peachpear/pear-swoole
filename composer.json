@@ -1,7 +1,7 @@
 {
     "name": "peachpear/pear-swoole",
     "description": "pear for swoole framework",
-    "keywords": ["pear", "swoole", "peachpear"],
+    "keywords": ["pear", "pear-swoole", "swoole", "peachpear"],
     "type": "project",
     "license": "MPL-2.0",
     "authors": [
