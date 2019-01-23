@@ -30,6 +30,7 @@ class StaskController
                 case 'CONNECT' :
                     // 通过传递过来的client_token去向API获取客户端详细信息（客户端所在应用、所在应用角色、客户端标识id等）
                     // 通过客户端所在应用和所在应用角色，获取接入应用配置$chat_config
+                    $chat_config = [];
                     // 写入swoole内存表
                     $server->table->set($fd, [
                         'app_token' => $chat_config['app_token'],
@@ -51,6 +52,7 @@ class StaskController
                     break;
                 case 'NEW_MSG' :
                     // 通过传递过来的$data['data']['client_token']去mysql数据表client_online_list，查找此client_token的多条信息，然后循环推送
+                    $mysqlData = [];
                     $client_info = explode('_', base64_decode($mysqlData['client_id']));
 
                     /* 如果客户端只存在单一服务端连接且就在本服务端上，则可以直接通过fd推送 */
