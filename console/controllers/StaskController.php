@@ -49,6 +49,9 @@ class StaskController
                         'data' => [],
                     ];
                     $server->push($fd, json_encode($sendMsg, JSON_UNESCAPED_SLASHES));
+
+                    Yii::$app->demoDB->close();
+                    
                     break;
                 case 'NEW_MSG' :
                     // 通过传递过来的$data['data']['client_token']去mysql数据表client_online_list，查找此client_token的多条信息，然后循环推送
@@ -85,6 +88,8 @@ class StaskController
                         ],
                     ];
                     $server->proxy->send(json_encode($proxyData) ."\r\n\r\n");
+
+                    Yii::$app->demoDB->close();
 
                     break;
                 case 'NEW_MSG_TO_FD' :
