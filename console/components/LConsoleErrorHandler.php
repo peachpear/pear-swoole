@@ -113,11 +113,12 @@ class LConsoleErrorHandler extends ErrorHandler
 
     /**
      * 渲染异常输出
-     * 不会用到，只是实现父类抽象方法
+     * 追踪父类可知，这里并不会用到
      * @param \Exception $exception
      */
     public function renderException($exception)
     {
-//        $this->handleException($exception);  // 不能这么写
+        // 本类上面异常处理、程序退出处理其中一个方法删了，这里可用到
+        $this->handleException($exception);
     }
 }
