@@ -107,14 +107,14 @@ proxy服务端的作用是代理服务，作为其中一个swoole服务端与其
 ```
 // 处理收到的服务端信息
 dealReceiveMsg(data, websocket) {
-	switch (data.event) 
-	{
-	    case 'CONNECT' :
-	        // 客户端发起在线连接后，服务端连接成功后，发送信息给客户端要求补充信息
-	        // 获取client_token后，发送到服务端记录个人详情
-	        var sendMsg = '{"event":"CONNECT","data":{"client_token":"abc123f3rf4vds43534fd"}}';
-	        websocket.send(sendMsg);
-	        break;
+    switch (data.event) 
+    {
+        case 'CONNECT' :
+            // 客户端发起在线连接后，服务端连接成功后，发送信息给客户端要求补充信息
+            // 获取client_token后，发送到服务端记录个人详情
+            var sendMsg = '{"event":"CONNECT","data":{"client_token":"abc123f3rf4vds43534fd"}}';
+            websocket.send(sendMsg);
+            break;
         case 'ONLINE' :
             // 服务器通知客户端个人详情记录成功
             // 客户端可以做在线后的事，如获取自己未读的信息
@@ -123,11 +123,12 @@ dealReceiveMsg(data, websocket) {
             // 服务器发送新信息给客户端
             // 客户端做展示处理逻辑
             ......
-	    default:
-	        break;
-	}
+        default:
+            break;
+    }
 }
 
+// 客户端浏览器js代码
 $(document).on('click',"#online", function () {
     if ("WebSocket" in window) {
         // 打开一个 web socket
