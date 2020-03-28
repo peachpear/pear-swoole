@@ -21,32 +21,32 @@ class LActiveRecord extends ActiveRecord implements JsonSerializable
      * @param int $tryNum
      * @return bool
      */
-	public function save($runValidation = true, $attributeNames = null, $tryNum = 3)
-	{
-		if (! $this instanceof LActiveRecord || $tryNum < 1) {
-			return false;
-		}
-		$flag = parent::save($runValidation, $attributeNames);
-		if (!$flag) {
-			$log = "";
-			foreach ($this->getAttributes() as $key=>$value)
-			{
-				$log .= " ".$key.'['.$value.']';
-			}
+    public function save($runValidation = true, $attributeNames = null, $tryNum = 3)
+    {
+        if (! $this instanceof LActiveRecord || $tryNum < 1) {
+            return false;
+        }
+        $flag = parent::save($runValidation, $attributeNames);
+        if (!$flag) {
+            $log = "";
+            foreach ($this->getAttributes() as $key=>$value)
+            {
+                $log .= " ".$key.'['.$value.']';
+            }
 
-			if ($tryNum == 1) {
+            if ($tryNum == 1) {
                 Yii::error("msg[insert ".static::tableName()." table is error]{$log}",  self::LOG_PREFIX . __FUNCTION__);
             } else {
                 Yii::warning("msg[insert ".static::tableName()." table is error]{$log}",  self::LOG_PREFIX . __FUNCTION__);
             }
 
-			sleep(1);
+            sleep(1);
 
-			return self::save($runValidation, $attributeNames, --$tryNum);
-		} else {
-			return $flag;
-		}
-	}
+            return self::save($runValidation, $attributeNames, --$tryNum);
+        } else {
+            return $flag;
+        }
+    }
 
     /**
      * Specify data which should be serialized to JSON
