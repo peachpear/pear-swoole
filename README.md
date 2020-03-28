@@ -1,5 +1,6 @@
 # pear-swoole
-pear让你更畅快地编程。pear-swoole是以pear-api为基础，增加聊天必要服务，重整为支持聊天服务的项目。 
+pear让你更畅快地编程。pear-swoole是以pear-api为基础，增加聊天必要服务，重整为支持聊天服务的项目。
+支持PHP、RabbitMQ、MySQL、Redis、Kafka、Swoole。 
 
 ### 前提准备
 
