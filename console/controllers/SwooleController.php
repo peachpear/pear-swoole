@@ -28,6 +28,7 @@ class SwooleController extends BaseController
             'ip' => Yii::$app->params['socket']['ip'],
             'port' => Yii::$app->params['socket']['port'],
             'config' => Yii::$app->params['socket_config'],
+            'proxy' => Yii::$app->params['proxy']
         ];
 
         $this->masterPid = file_exists($this->setting['config']['pid_file'])
